@@ -125,26 +125,35 @@ export async function DELETE(
     console.log("###store--nested-patch########", error);
   }
 }
+
 export async function GET(
   req: NextRequest,
-  params: { params: { storeId: string; categoryId: string } }
+  params: { params: { categoryId: string } }
 ) {
   try {
-    const { categoryId, storeId } = params.params;
+    const { categoryId } = params.params;
 
-    const categoriesOperation = prismadb.billBoard.findMany({
+    const categoriesOperation = prismadb.category.findUnique({
       where: {
         id: categoryId,
+      },
+      include: {
+        billboard: true,
+        products: {
+          include: {
+            category: true,
+            color: true,
+            size: true,
+            images: true,
+          },
+        },
       },
     });
     return categoriesOperation
       .then((e) => {
         console.log(e);
 
-        return NextResponse.json(
-          { message: "Found successfully ✅", store: e },
-          { status: 201 }
-        );
+        return NextResponse.json(e);
       })
       .catch((err) => {
         console.log(err.message);

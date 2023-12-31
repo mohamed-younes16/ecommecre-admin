@@ -167,12 +167,13 @@ export async function DELETE(
 }
 export async function GET(
   req: NextRequest,
-  params: { params: { storeId: string; productId: string } }
+  params: { params: {  productId: string } }
 ) {
   try {
-    const { productId, storeId } = params.params;
+    const { productId,  } = params.params;
 
-    const productsOperation = prismadb.product.findMany({
+
+    const productsOperation = prismadb.product.findUnique({
       where: {
         id: productId,
       },
@@ -187,10 +188,7 @@ export async function GET(
       .then((e) => {
         console.log(e);
 
-        return NextResponse.json(
-          { message: "Found successfully ✅", products: e },
-          { status: 201 }
-        );
+        return NextResponse.json(e);
       })
       .catch((err) => {
         console.log(err.message);
