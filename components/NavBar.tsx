@@ -19,7 +19,7 @@ const NavBar = ({ stores }: { stores: Store[] }) => {
         </div>{" "}
         <div className="flexcenter gap-4 min-w-[150px]">
           <ModeToggle />
-          <UserButton />{" "}
+          <UserButton afterSignOutUrl="/" />{" "}
         </div>
       </div>
     </div>
