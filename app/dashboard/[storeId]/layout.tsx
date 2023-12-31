@@ -1,5 +1,4 @@
-import { ThemeProvider } from "@/components/ui/theme-provider";
-import { ClerkProvider, auth } from "@clerk/nextjs";
+import {  auth } from "@clerk/nextjs";
 import "@radix-ui/themes/styles.css";
 import { ReactNode } from "react";
 import "../../globals.css";
@@ -7,13 +6,11 @@ import prismadb from "@/lib/prismabd";
 import { redirect } from "next/navigation";
 import NavBar from "@/components/NavBar";
 import { Store } from "@prisma/client";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 
 export default async function DashboardLayout({
-  params: { storeId },
   children,
 }: {
-  params: { storeId: string };
   children: ReactNode;
 }) {
   const { userId } = auth();
