@@ -2,7 +2,7 @@ import Heading from "@/components/Heading";
 
 import { ReactNode } from "react";
 
-const page = async ({ children }: { children: ReactNode }) => {
+const page = async () => {
   return (
     <main>
       <Heading title="Overview" description="Overview your total Income"/>
