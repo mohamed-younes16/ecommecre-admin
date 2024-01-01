@@ -22,7 +22,7 @@ export default async function SetupLayout({
   });
 
   if (store) {
-    redirect(`/dashboard/${store.id}`);
+    redirect(`/dashboard/${store.id}/overview`);
   }
 
   return <>{children}</>;
