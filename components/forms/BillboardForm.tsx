@@ -17,12 +17,12 @@ import { toast } from "sonner";
 import "@uploadthing/react/styles.css";
 import axios from "axios";
 import { billBoard } from "@prisma/client";
-import { ImagePlusIcon, Loader2, Trash2, } from "lucide-react";
+import { ImagePlusIcon, Loader2, Trash2 } from "lucide-react";
 import { UploadButton } from "@/utils/uploadthing";
 import Image from "next/image";
 import { useState } from "react";
 import Heading from "../Heading";
-import { useRouter } from "next/navigation";
+import _ from "lodash";
 
 const BillboardForm = ({
   billboard,
@@ -34,17 +34,32 @@ const BillboardForm = ({
   const title = billboard ? "Edit BillBoard" : "Create BillBoard";
   const description = billboard ? "Edit BillBoard" : "Create BillBoard";
   const action = billboard ? "update" : "create ";
-  const router = useRouter()
+
   const [begain, setBegain] = useState(false);
   const form = useForm<z.infer<typeof BillBoardSchema>>({
     resolver: zodResolver(BillBoardSchema),
     defaultValues: {
       label: billboard?.label || "",
       imageUrl: billboard?.imageUrl || "",
+      labelColor: billboard?.labelColor || "",
     },
   });
+  function ignoreKeys(obj, keysToIgnore) {
+    const newObj = { ...obj };
+    keysToIgnore.forEach((key) => delete newObj[key]);
+    return newObj;
+  }
+  const watchedFormData = form.watch();
+  const keysToIgnore = ["createdAt", "updatedAt", "storeId", "id"];
+  const initialProduct = {
+    ...ignoreKeys(billboard, keysToIgnore),
+  
+  };
+
+  const isFormDataChanged = !_.isEqual(initialProduct, watchedFormData);
 
   async function onSubmit(values: z.infer<typeof BillBoardSchema>) {
+    toast.loading(action, {  duration: 10000 });
     try {
       const data = {
         ...values,
@@ -65,7 +80,7 @@ const BillboardForm = ({
         .then((e) => {
           toast.success(e.data.message, { invert: true });
           setTimeout(() => {
-            window.location.assign(`/dashboard/${storeId}/billboards`)
+            window.location.assign(`/dashboard/${storeId}/billboards`);
           }, 500);
         })
         .catch((e) => {
@@ -74,7 +89,6 @@ const BillboardForm = ({
             invert: true,
           });
         });
-
     } catch (error) {
       console.log(error);
     }
@@ -104,6 +118,23 @@ const BillboardForm = ({
             />
             <FormField
               control={form.control}
+              name="labelColor"
+              render={({ field }) => (
+                <FormItem className=" flex flex-col w-fit   ">
+                  <FormLabel>Label color</FormLabel>
+
+                  <FormControl className="">
+                    <Input
+                      className="account-form_input "
+                      type="text"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="imageUrl"
               render={({ field }) => (
                 <FormItem className=" flex flex-col justify-start flex-wrap ">
@@ -111,7 +142,7 @@ const BillboardForm = ({
                   {field.value ? (
                     <FormLabel
                       className=" mr-8 relative 
-             w-full max-w-[700px]  m-0 !h-[500px] 
+             w-full max-w-[500px]  m-0 h-[300px] max-md:max-w-[400px]  max-sm:h-[200px]
             bg-zinc-900 rounded-xl  flexcenter "
                     >
                       {field?.value ? (
@@ -170,13 +201,11 @@ const BillboardForm = ({
                       />
                     </div>
                   )}
-
-            
                 </FormItem>
               )}
             />
           </div>
-          {form.watch().label !== billboard?.label && (
+          {isFormDataChanged && (
             <div className="flex items-center gap-6 justify-start">
               <Button
                 type="submit"

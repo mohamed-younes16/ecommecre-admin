@@ -1,5 +1,4 @@
 
-import { billBoard } from '@prisma/client';
 import * as z from "zod";
 
 export const StoreSchema = z.object({
@@ -14,10 +13,8 @@ export const BillBoardSchema = z.object({
     .string()
     .min(4, { message: "must be at least 4 characters long" })
     .max(20),
-    imageUrl: z
-    .string()
-    .min(1)
-
+  imageUrl: z.string().min(1),
+  labelColor: z.string().min(1),
 });
 
 export const CategorySchema = z.object({
@@ -25,31 +22,24 @@ export const CategorySchema = z.object({
     .string()
     .min(4, { message: "must be at least 4 characters long" })
     .max(20),
-    billboardId:z.string().min(1)
-   
-
+  billboardId: z.string().min(1),
 });
 export const sizeSchema = z.object({
   name: z
     .string()
-    .min(4, { message: "must be at least 4 characters long" })
+    .min(1, { message: "must be at least 4 characters long" })
     .max(20),
-    value:z.enum(["S", "M", "L", "XL", "XXL", "XXXL"]),
-   
-
+  value: z.enum(["S", "M", "L", "XL", "XXL", "XXXL"]),
 });
 export const colorSchema = z.object({
   name: z
     .string()
-    .min(4, { message: "must be at least 4 characters long" })
+    .min(1, { message: "must be at least 4 characters long" })
     .max(20),
-    value:z.string().min(1)
-   
-
+  value: z.string().min(1),
 });
 
 export const productSchema = z.object({
-
   name: z.string().min(4),
   sizeId: z.string().min(1),
   categoryId: z.string().min(1),
@@ -58,7 +48,5 @@ export const productSchema = z.object({
   description: z.string().min(1),
   isArchived: z.boolean(),
   isFeatured: z.boolean(),
-  images: z.string().array().min(1), 
-
+  images: z.string().array().min(1),
 });
-

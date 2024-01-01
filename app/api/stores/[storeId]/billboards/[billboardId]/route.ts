@@ -11,7 +11,11 @@ export async function PATCH(
     const { userId } = auth();
     if (!userId) return new NextResponse("unauthorized", { status: 401 });
     const { billboardId, storeId } = params.params;
-    const { label, imageUrl }: { label: string; imageUrl: string } =
+    const {
+      label,
+      imageUrl,
+      labelColor,
+    }: { label: string; imageUrl: string; labelColor: string } =
       await req.json();
 
     if (!label) return new NextResponse("no label Provided", { status: 401 });
@@ -24,7 +28,10 @@ export async function PATCH(
         },
         data: {
           billBoards: {
-            update: { where: { id: billboardId }, data: { imageUrl, label } },
+            update: {
+              where: { id: billboardId },
+              data: { imageUrl, label, labelColor },
+            },
           },
         },
       });
@@ -58,7 +65,11 @@ export async function POST(
     if (!userId) return new NextResponse("unauthorized", { status: 401 });
     const { storeId } = params.params;
 
-    const { label, imageUrl }: { label: string; imageUrl: string } =
+    const {
+      label,
+      imageUrl,
+      labelColor,
+    }: { label: string; imageUrl: string; labelColor: string } =
       await req.json();
 
     if (!label) return new NextResponse("no label Provided", { status: 401 });
@@ -69,7 +80,7 @@ export async function POST(
           id: storeId,
           userId,
         },
-        data: { billBoards: { create: { imageUrl, label } } },
+        data: { billBoards: { create: { imageUrl, label, labelColor } } },
       });
       return billboardOperation
         .then((e) => {
@@ -128,10 +139,10 @@ export async function DELETE(
 }
 export async function GET(
   req: NextRequest,
-  params: { params: { storeId: string; billboardId: string } }
+  params: { params: { billboardId: string } }
 ) {
   try {
-    const { billboardId, storeId } = params.params;
+    const { billboardId } = params.params;
 
     const billboardOperation = prismadb.billBoard.findMany({
       where: {
@@ -140,12 +151,7 @@ export async function GET(
     });
     return billboardOperation
       .then((e) => {
-        console.log(e);
-
-        return NextResponse.json(
-          { message: "Found successfully ✅", store: e },
-          { status: 201 }
-        );
+        return NextResponse.json(e, { status: 201 });
       })
       .catch((err) => {
         console.log(err.message);

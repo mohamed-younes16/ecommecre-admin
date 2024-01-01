@@ -22,6 +22,8 @@ const page = async ({
     id: e.id,
     createdAt: format(e.createdAt, "MMMM do , yyyy"),
     label: e.label,
+    imageUrl:e.imageUrl,
+    labelColor:e.labelColor
   }));
   console.log(formattedBillBoards);
   return (

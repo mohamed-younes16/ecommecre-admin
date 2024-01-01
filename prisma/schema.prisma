@@ -33,7 +33,7 @@ model billBoard {
   store      Store      @relation("storeToBillBoard", fields: [storeId], references: [id])
   imageUrl   String
   label      String
-  
+  labelColor String     @default("")
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   categories category[] @relation("billboardToCategory")
@@ -51,6 +51,7 @@ model category {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   products    product[] @relation("productocategory")
+
   @@index([id])
 }
 
@@ -124,15 +125,15 @@ model Image {
 }
 
 model order {
-  id           String      @id @unique @default(cuid())
-  storeId      String
-  store        Store       @relation("storetoOrder", fields: [storeId], references: [id])
-  phoneNumber  String      @default("")
-  address String      @default("")
-  isPaid       Boolean
-  items        orderItem[] @relation("ordertoItem")
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  id          String      @id @unique @default(cuid())
+  storeId     String
+  store       Store       @relation("storetoOrder", fields: [storeId], references: [id])
+  phoneNumber String      @default("")
+  address     String      @default("")
+  isPaid      Boolean
+  items       orderItem[] @relation("ordertoItem")
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
   @@index([id])
 }
@@ -140,9 +141,9 @@ model order {
 model orderItem {
   id        String  @id @unique @default(cuid())
   orderId   String
-  order     order   @relation("ordertoItem", fields: [orderId], references: [id],onDelete: Cascade)
+  order     order   @relation("ordertoItem", fields: [orderId], references: [id], onDelete: Cascade)
   productId String
-  product   product @relation("productToItem", fields: [productId], references: [id],onDelete: Cascade)
+  product   product @relation("productToItem", fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([id])
 }
