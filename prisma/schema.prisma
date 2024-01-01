@@ -50,7 +50,6 @@ model category {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   products    product[] @relation("productocategory")
-
   @@index([id])
 }
 
@@ -140,9 +139,9 @@ model order {
 model orderItem {
   id        String  @id @unique @default(cuid())
   orderId   String
-  store     order   @relation("ordertoItem", fields: [orderId], references: [id])
+  order     order   @relation("ordertoItem", fields: [orderId], references: [id],onDelete: Cascade)
   productId String
-  Product   product @relation("productToItem", fields: [productId], references: [id])
+  product   product @relation("productToItem", fields: [productId], references: [id],onDelete: Cascade)
 
   @@index([id])
 }

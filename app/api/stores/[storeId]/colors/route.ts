@@ -10,13 +10,13 @@ export async function GET(
         return new NextResponse("Store id is required", { status: 400 });
       }
   
-      const categories = await prismadb.color.findMany({
+      const colors = await prismadb.color.findMany({
         where: {
           storeId: params.storeId
         }
       });
     
-      return NextResponse.json(categories);
+      return NextResponse.json(colors);
     } catch (error) {
       console.log('[COLORS_GET]', error);
       return new NextResponse("Internal error", { status: 500 });

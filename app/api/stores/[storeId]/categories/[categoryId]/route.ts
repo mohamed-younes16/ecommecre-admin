@@ -132,6 +132,10 @@ export async function GET(
 ) {
   try {
     const { categoryId } = params.params;
+    const { searchParams } = new URL(req.url);
+    const colorId = searchParams.get("colorId") || undefined;
+    const sizeId = searchParams.get("sizeId") || undefined;
+    const isFeatured = searchParams.get("isFeatured");
 
     const categoriesOperation = prismadb.category.findUnique({
       where: {
@@ -140,6 +144,17 @@ export async function GET(
       include: {
         billboard: true,
         products: {
+          where: {
+            colorId,
+            sizeId,
+            isFeatured:
+              isFeatured === "true"
+                ? true
+                : isFeatured === "false"
+                ? false
+                : undefined,
+            isArchived: false,
+          },
           include: {
             category: true,
             color: true,

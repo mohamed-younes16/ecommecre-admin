@@ -10,6 +10,7 @@ import React from "react";
 import { orderColumn, columns } from "./components/columns";
 import ApiList from "@/components/ApiList";
 import { Separator } from "@/components/ui/separator";
+import { order, orderItem } from "@prisma/client";
 
 const page = async ({
   params: { storeId },
@@ -18,16 +19,28 @@ const page = async ({
 }) => {
   const orders = await prismadb.order.findMany({
     where: { storeId },
-    include: { items: { include: { Product: true } } },
+    orderBy: { createdAt: "desc" },
+    include: { items: { include: { product: true } } },
   });
+
+  const orderPrice = (order) => {
+    let tot = 0;
+    order.items.forEach((e) => {
+      tot += Number(e.product.price);
+    });
+    console.log(tot);
+    return tot;
+  };
+  orderPrice(orders[0]);
   const formattedorders: orderColumn[] = orders.map((e) => ({
+    products: e.items.map((e) => e.product.name).join(" "),
+
     id: e.id,
     createdAt: format(e.createdAt, "MMMM do , yyyy"),
     phone: e.phoneNumber,
     address: e.address,
     isPaid: e.isPaid,
-    totalPrice: e.items.reduce((c, n) => c + (+(n.Product.price)), 0),
-
+    totalPrice: +orderPrice(e),
   }));
 
   return (
@@ -37,11 +50,9 @@ const page = async ({
           title={`orders (${orders.length})`}
           description="Manage orders For Your Store"
         />{" "}
-   
       </div>{" "}
       <Separator className="my-6" />
       <DataTable searchKey="name" columns={columns} data={formattedorders} />
-
     </div>
   );
 };

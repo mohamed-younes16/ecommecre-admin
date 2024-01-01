@@ -12,9 +12,15 @@ export type orderColumn = {
   phone: string;
   address: string;
   totalPrice: number;
+  products:string
 };
 
 export const columns: ColumnDef<orderColumn>[] = [
+
+  {
+    accessorKey: "products",
+    header: "products",
+  },
   {
     accessorKey: "address",
     header: "address",
@@ -42,7 +48,8 @@ export const columns: ColumnDef<orderColumn>[] = [
       );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("price"))
+
+      const amount = parseFloat(row.getValue("totalPrice"))
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
