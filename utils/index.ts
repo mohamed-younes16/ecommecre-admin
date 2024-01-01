@@ -25,6 +25,11 @@ export const handleimage =   (e:ChangeEvent<HTMLInputElement> , fieldchange:(v:s
   
   }
 
+  export const formatedPrice = (price: number) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(price);
 
   // created by chatgpt
 export function isBase64Image(imageData: string) {
