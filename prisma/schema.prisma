@@ -33,6 +33,7 @@ model billBoard {
   store      Store      @relation("storeToBillBoard", fields: [storeId], references: [id])
   imageUrl   String
   label      String
+  
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   categories category[] @relation("billboardToCategory")
