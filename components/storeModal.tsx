@@ -23,9 +23,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import "@uploadthing/react/styles.css";
 import axios from "axios";
-import { ReactNode } from "react";
 
-// Import necessary dependencies and components
 
 const CommonForm = ({ form, onSubmit, icon }) => (
   <>

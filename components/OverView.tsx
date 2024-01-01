@@ -29,7 +29,7 @@ const OverView = ({ data }) => {
   const { theme } = useTheme();
 
   return (
-    <div className=" w-[1000px]">
+    <div className=" w-[1100px] h-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart width={150} height={40} data={data}>
           <Tooltip content={<CustomTooltip />} />
