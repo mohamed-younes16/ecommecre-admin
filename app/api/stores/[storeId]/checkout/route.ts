@@ -24,12 +24,11 @@ export async function POST(
   products.forEach((el) =>
     line_items.push({
       quantity: 1,
-
-      adjustable_quantity: { enabled: true, },
+      adjustable_quantity: { enabled: false },
       price_data: {
         currency: "USD",
-        product_data: { name: el.name },
-        unit_amount: +el.price * 100,
+        product_data: { name: el.name, },
+        unit_amount: +el.price ,
       },
     })
   );
@@ -46,7 +45,6 @@ export async function POST(
           },
         })),
       },
-      
     },
   });
   const sesssion = await stripe.checkout.sessions.create({

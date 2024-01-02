@@ -30,7 +30,7 @@ const page = async ({
     size:e.size.value,
     isFeatured: e.isFeatured,
     price:e.price.toString(),
-    images: e.images.length
+    image: e.images[0].url
   }));
 
   return (

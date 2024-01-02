@@ -63,7 +63,7 @@ export function StoreSwitcher({ stores }: { stores: Store[] }) {
                 onSelect={(currentValue) => {
                   setStorename(currentValue === Storename ? "" : currentValue);
                   setOpen(false);
-                  window.location.assign( `/dashboard/${store.id}`)
+                  window.location.assign( `/dashboard/${store.id}/overview`)
                 }}
               >
                 <Check

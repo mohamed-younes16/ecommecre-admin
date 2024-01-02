@@ -1,5 +1,4 @@
 import Stripe from "stripe";
-import { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { headers } from "next/headers";
@@ -50,11 +49,7 @@ export async function POST(req: Request) {
       },
       include: { items: true },
     });
-    const productsIds = order.items.map((e) => e.productId);
-    await prismadb.product.updateMany({
-      where: { id: { in: [...productsIds] } },
-      data: { isArchived: true },
-    });
+    
    
   } return new NextResponse(null, { status: 200 });
 }

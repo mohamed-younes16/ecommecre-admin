@@ -27,7 +27,7 @@ const DeleteStore = ({ storeId }: { storeId: string }) => {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <Heading title="Delete Server" description="Are You Sure ?" />
+              <Heading title="Delete Store" description="Are You Sure ?" />
             </DialogHeader>
 
             <DialogFooter>

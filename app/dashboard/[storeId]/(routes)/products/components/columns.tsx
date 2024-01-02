@@ -2,21 +2,22 @@
 
 import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown,  } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import CellAction from "./CellAction";
 import { size } from "@prisma/client";
+import Image from "next/image";
 
 export type ProductColumn = {
   id: string;
   name: string;
   createdAt: string;
   category: string;
-  size:string;
-  color:string;
-  isArchived:boolean;
-  isFeatured:boolean;
-  price:string;
-  images:number
+  size: string;
+  color: string;
+  isArchived: boolean;
+  isFeatured: boolean;
+  price: string;
+  image: string;
 };
 
 export const columns: ColumnDef<ProductColumn>[] = [
@@ -62,13 +63,13 @@ export const columns: ColumnDef<ProductColumn>[] = [
       );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("price"))
+      const amount = parseFloat(row.getValue("price"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(amount)
- 
-      return <div className="font-bold">{formatted}</div>
+      }).format(amount);
+
+      return <div className="font-bold">{formatted}</div>;
     },
   },
   {
@@ -76,23 +77,32 @@ export const columns: ColumnDef<ProductColumn>[] = [
     header: "Created at",
   },
   {
-    accessorKey:"images",
-    header: "Images count",
+    accessorKey: "images",
+    header: "Image",
+    cell: ({ row }) => (
+      <Image
+        alt=""
+        height={50}
+        width={50}
+        className="h-[50px] -[50px] object-contain"
+        src={row.original.image}
+      />
+    ),
   },
   {
-    accessorKey:"category",
+    accessorKey: "category",
     header: "Category",
   },
   {
-    accessorKey:"isArchived",
+    accessorKey: "isArchived",
     header: "is archived",
   },
   {
-    accessorKey:"isFeatured",
+    accessorKey: "isFeatured",
     header: "is featured",
   },
   {
-    accessorKey:"size",
+    accessorKey: "size",
     header: "size",
   },
   {

@@ -44,11 +44,12 @@ export async function DELETE(
   params: { params: { storeId: string } }
 ) {
   try {
+    console.log(params.params.storeId)
     const { userId } = auth();
     if (!userId) return new NextResponse("unauthorized", { status: 401 });
 
     if (userId) {
-      const store = prismadb.store.deleteMany({
+      const store = prismadb.store.delete({
         where: { id: params.params.storeId, userId },
       });
       return store
