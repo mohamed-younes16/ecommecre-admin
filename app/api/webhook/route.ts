@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import prismadb from "@/lib/prismabd";
 
 export async function POST(req: Request) {
-  console.log("__________________________________________________________________________________________")
+  console.log("############################################################")
   const body = await req.text();
   const signature = headers().get("Stripe-Signature") as string;
   let event: Stripe.Event;
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
       },
       include: { items: true },
     });
-    
+    console.log(order)
    
   } return new NextResponse(null, { status: 200 });
 }

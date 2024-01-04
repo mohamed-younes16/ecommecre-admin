@@ -23,7 +23,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Heading from "../Heading";
 import _ from "lodash";
-
+import { ignoreKeys } from "@/actions/index";
 const BillboardForm = ({
   billboard,
   storeId,
@@ -44,22 +44,17 @@ const BillboardForm = ({
       labelColor: billboard?.labelColor || "",
     },
   });
-  function ignoreKeys(obj, keysToIgnore) {
-    const newObj = { ...obj };
-    keysToIgnore.forEach((key) => delete newObj[key]);
-    return newObj;
-  }
+
   const watchedFormData = form.watch();
   const keysToIgnore = ["createdAt", "updatedAt", "storeId", "id"];
   const initialProduct = {
     ...ignoreKeys(billboard, keysToIgnore),
-  
   };
 
   const isFormDataChanged = !_.isEqual(initialProduct, watchedFormData);
 
   async function onSubmit(values: z.infer<typeof BillBoardSchema>) {
-    toast.loading(action, {  duration: 10000 });
+    toast.loading(action, { duration: 10000 });
     try {
       const data = {
         ...values,
@@ -145,7 +140,7 @@ const BillboardForm = ({
              w-full max-w-[500px]  m-0 h-[300px] max-md:max-w-[400px]  max-sm:h-[200px]
             bg-zinc-900 rounded-xl  flexcenter "
                     >
-                      {field?.value ? (
+                      {field?.value && (
                         <>
                           <Trash2
                             onClick={() => field.onChange("")}
@@ -155,19 +150,11 @@ const BillboardForm = ({
                           />
                           <Image
                             src={field.value}
-                            className="object-cover rounded-lg"
+                            className="object-contain rounded-lg"
                             alt="image of you"
                             fill
                           />
                         </>
-                      ) : (
-                        <Image
-                          src="/assets/profile.svg"
-                          className=" object-contain"
-                          alt="image"
-                          height={70}
-                          width={70}
-                        />
                       )}
                     </FormLabel>
                   ) : (

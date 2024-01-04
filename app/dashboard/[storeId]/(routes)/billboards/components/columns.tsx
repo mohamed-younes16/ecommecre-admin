@@ -57,7 +57,7 @@ export const columns: ColumnDef<BillBoardColumn>[] = [
         <div className=" bg-white rounded-full w-fit mx-auto flexcenter p-2">
           <div
             style={{ backgroundColor: row.original.labelColor }}
-            className="w-6 h-6 rounded-full"
+            className="w-6 h-6 border-2 border-foreground rounded-full"
           />
         </div>
       );

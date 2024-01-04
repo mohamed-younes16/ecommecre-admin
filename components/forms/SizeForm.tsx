@@ -29,7 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 const SizeForm = ({ size, storeId }: { size: size; storeId: string }) => {
-  console.log(size);
+
   const title = size ? "Edit size" : "Create size";
   const description = size ? "Edit size" : "Create size";
   const action = size ? "update" : "create ";

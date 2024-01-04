@@ -48,6 +48,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { ignoreKeys } from "@/actions";
 
 const ProducForm = ({
   product,
@@ -84,11 +85,7 @@ const ProducForm = ({
       price: product?.price || 0,
     },
   });
-  function ignoreKeys(obj, keysToIgnore) {
-    const newObj = { ...obj };
-    keysToIgnore.forEach((key) => delete newObj[key]);
-    return newObj;
-  }
+  
   const watchedFormData = form.watch();
   const keysToIgnore = ["createdAt", "updatedAt", "storeId", "id"];
   const initialProduct = {
@@ -232,7 +229,7 @@ const ProducForm = ({
                 <FormItem className=" flex flex-col w-full   ">
                   <FormLabel>Name of Product</FormLabel>
 
-                  <FormControl className="">
+                  <FormControl>
                     <Input
                       className="account-form_input "
                       type="text"
@@ -286,7 +283,7 @@ const ProducForm = ({
                 <FormItem className=" flex flex-col w-full   ">
                   <FormLabel>choose a color</FormLabel>
                   <FormControl>
-                    <Select onValueChange={(e) => field.onChange(e)}>
+                    <Select defaultValue={product?.colorId} onValueChange={(e) => field.onChange(e)}>
                       <SelectTrigger className=" !w-full   ring-0 !shadow-none">
                         <SelectValue placeholder="Select a color" />
                       </SelectTrigger>
@@ -323,7 +320,7 @@ const ProducForm = ({
                 <FormItem className=" flex flex-col w-full   ">
                   <FormLabel>choose a size</FormLabel>
                   <FormControl>
-                    <Select onValueChange={(e) => field.onChange(e)}>
+                    <Select  defaultValue={product?.sizeId}  onValueChange={(e) => field.onChange(e)}>
                       <SelectTrigger className=" !w-full ring-0 !shadow-none">
                         <SelectValue placeholder="Select a size" />
                       </SelectTrigger>
@@ -353,7 +350,7 @@ const ProducForm = ({
                 <FormItem className=" flex flex-col w-full   ">
                   <FormLabel>choose a category</FormLabel>
                   <FormControl>
-                    <Select onValueChange={(e) => field.onChange(e)}>
+                    <Select  defaultValue={product?.categoryId}  onValueChange={(e) => field.onChange(e)}>
                       <SelectTrigger className=" !w-full  ring-0 !shadow-none">
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>

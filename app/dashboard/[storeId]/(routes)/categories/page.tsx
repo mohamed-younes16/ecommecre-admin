@@ -27,7 +27,8 @@ const page = async ({
     id: e.id,
     createdAt: format(e.createdAt, "MMMM do , yyyy"),
     name: e.name,
-    billboardLabel: e.billboard.label
+    billboardLabel: e.billboard.label,
+    logo:e.logo
   }));
 
   return (

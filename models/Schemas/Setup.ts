@@ -23,6 +23,7 @@ export const CategorySchema = z.object({
     .min(4, { message: "must be at least 4 characters long" })
     .max(20),
   billboardId: z.string().min(1),
+  logo: z.string().min(1),
 });
 export const sizeSchema = z.object({
   name: z

@@ -9,7 +9,7 @@ export async function PATCH(
   try {
     const { userId } = auth();
     if (!userId) return new NextResponse("unauthorized", { status: 401 });
-    console.log(params);
+
     const { name } = await req.json();
 
     if (!name) return new NextResponse("no Name Provided", { status: 401 });
@@ -44,7 +44,7 @@ export async function DELETE(
   params: { params: { storeId: string } }
 ) {
   try {
-    console.log(params.params.storeId)
+
     const { userId } = auth();
     if (!userId) return new NextResponse("unauthorized", { status: 401 });
 

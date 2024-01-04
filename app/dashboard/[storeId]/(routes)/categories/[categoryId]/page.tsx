@@ -1,4 +1,4 @@
-import BillboardForm from "@/components/forms/BillboardForm";
+
 import CategoryForm from "@/components/forms/CategoryForm";
 import prismadb from "@/lib/prismabd";
 import React from "react";
@@ -10,6 +10,7 @@ const page = async ({
 }) => {
   const category = await prismadb.category.findUnique({
     where: { id: categoryId },
+    include:{billboard:true}
   });
   const billBoards = await prismadb.billBoard.findMany({
     where: { storeId },
@@ -20,6 +21,6 @@ const page = async ({
       <CategoryForm category={category!} billBoards={billBoards} storeId={storeId} />
     </div>
   );
-};
+}
 
 export default page;

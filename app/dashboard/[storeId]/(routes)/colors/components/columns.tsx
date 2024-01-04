@@ -21,7 +21,7 @@ export const columns: ColumnDef<ColorColumn>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          name
+          color name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -35,8 +35,7 @@ export const columns: ColumnDef<ColorColumn>[] = [
           {row.original.value}{" "}
           <div
             style={{ backgroundColor: row.original.value }}
-            className="rounded-full w-6 h-6"
-          ></div>
+            className="rounded-full border-2 border-foreground w-6 h-6"/>
         </div>
       );
     },

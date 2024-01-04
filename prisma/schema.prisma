@@ -48,6 +48,7 @@ model category {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   products    product[] @relation("productocategory")
+  logo        String    @default("")
 
   @@index([id])
 }
@@ -141,7 +142,7 @@ model orderItem {
   order     order   @relation("ordertoItem", fields: [orderId], references: [id], onDelete: Cascade)
   productId String
   product   product @relation("productToItem", fields: [productId], references: [id], onDelete: Cascade)
-  count     Int?    @default(1)
+  count     Int  @default(1)
 
   @@index([id])
 }

@@ -10,8 +10,11 @@ export async function PATCH(
     const { userId } = auth();
     if (!userId) return new NextResponse("unauthorized", { status: 401 });
     const { categoryId, storeId } = params.params;
-    const { name, billboardId }: { name: string; billboardId: string } =
-      await req.json();
+    const {
+      name,
+      billboardId,
+      logo,
+    }: { name: string; billboardId: string; logo: string } = await req.json();
 
     if (!name) return new NextResponse("no name Provided", { status: 401 });
 
@@ -23,7 +26,10 @@ export async function PATCH(
         },
         data: {
           categories: {
-            update: { where: { id: categoryId }, data: { name, billboardId } },
+            update: {
+              where: { id: categoryId },
+              data: { name, billboardId, logo },
+            },
           },
         },
       });
@@ -57,18 +63,21 @@ export async function POST(
     if (!userId) return new NextResponse("unauthorized", { status: 401 });
     const { storeId } = params.params;
 
-    const { name, billboardId }: { name: string; billboardId: string } =
-      await req.json();
+    const {
+      name,
+      billboardId,
+      logo,
+    }: { name: string; billboardId: string; logo: string } = await req.json();
 
     if (!name) return new NextResponse("no name Provided", { status: 401 });
-
+console.log({ billboardId, name, logo })
     if (name) {
       const categoriesOperation = prismadb.store.update({
         where: {
           id: storeId,
           userId,
         },
-        data: { categories: { create: { billboardId, name } } },
+        data: { categories: { create: { billboardId, name, logo } } },
       });
       return categoriesOperation
         .then((e) => {

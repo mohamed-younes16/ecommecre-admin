@@ -1,3 +1,4 @@
+
 import prismadb from "@/lib/prismabd";
 
 export const getTotalRevenue = async (storeId: string) => {
@@ -15,7 +16,11 @@ export const getTotalRevenue = async (storeId: string) => {
   }, 0);
   return totalPrice;
 };
-
+export const ignoreKeys = (obj, keysToIgnore) => {
+  const newObj = { ...obj };
+  keysToIgnore.forEach((key) => delete newObj[key]);
+  return newObj;
+};
 export const getTotalStock = async (storeId: string) =>
   await prismadb.product.count({
     where: { storeId, isArchived: false },
@@ -55,7 +60,7 @@ export const getGraphData = async (storeId: string) => {
     { month: "December", total: 0 },
   ];
   for (let i in monthlyRevenue) {
-    GraphData[+i].total=monthlyRevenue[+i]
+    GraphData[+i].total = monthlyRevenue[+i];
   }
-  return (GraphData);
+  return GraphData;
 };

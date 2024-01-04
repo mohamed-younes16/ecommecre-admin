@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import "@uploadthing/react/styles.css";
 import axios from "axios";
 import { billBoard, category } from "@prisma/client";
-import { Loader2 } from "lucide-react";
+import { ImagePlusIcon, Loader2, Trash2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -27,10 +27,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { useEffect, useState } from "react";
 import Heading from "../Heading";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { ignoreKeys } from "@/actions";
+import _ from "lodash";
+import { UploadButton } from "@/utils/uploadthing";
+import { useState } from "react";
 
 const CategoryForm = ({
   category,
@@ -44,20 +46,25 @@ const CategoryForm = ({
   const title = category ? "Edit category" : "Create category";
   const description = category ? "Edit category" : "Create category";
   const action = category ? "update" : "create ";
-  const router = useRouter();
   const [begain, setBegain] = useState(false);
   const form = useForm<z.infer<typeof CategorySchema>>({
     resolver: zodResolver(CategorySchema),
     defaultValues: {
       name: category?.name || "",
       billboardId: category?.billboardId || "",
+      logo: category?.logo || "",
     },
   });
-useEffect(() => {
-console.log(form.formState.isSubmitting)
-}, [form.formState])
+  const watchedFormData = form.watch();
+  const keysToIgnore = ["createdAt", "updatedAt", "storeId", "id", "billboard"];
+  const initialProduct = {
+    ...ignoreKeys(category, keysToIgnore),
+  };
+
+  const isFormDataChanged = !_.isEqual(initialProduct, watchedFormData);
 
   async function onSubmit(values: z.infer<typeof CategorySchema>) {
+    toast.loading("");
     try {
       const data = {
         ...values,
@@ -102,7 +109,7 @@ console.log(form.formState.isSubmitting)
               name="name"
               render={({ field }) => (
                 <FormItem className=" flex flex-col w-fit   ">
-                  <FormLabel>Label</FormLabel>
+                  <FormLabel>Label Name</FormLabel>
 
                   <FormControl className="">
                     <Input
@@ -114,7 +121,69 @@ console.log(form.formState.isSubmitting)
                 </FormItem>
               )}
             />
-
+            <FormField
+              control={form.control}
+              name="logo"
+              render={({ field }) => (
+                <FormItem className=" flex flex-col justify-start flex-wrap ">
+                  <FormLabel>category Logo</FormLabel>
+                  {field.value ? (
+                    <FormLabel
+                      className=" mr-8 relative 
+             w-full max-w-[90px] m-0 h-[90px] 
+            bg-zinc-900 rounded-xl  flexcenter "
+                    >
+                      {field?.value && (
+                        <>
+                          <Trash2
+                            onClick={() => field.onChange("")}
+                            className="absolute cursor-pointer transition-all  
+                      hover:scale-105 bg-red-500 -top-2 -right-2
+                      rounded-md  p-2 h-10 w-10 text-white z-50"
+                          />
+                          <Image
+                            src={field.value}
+                            className=" object-contain   rounded-lg"
+                            alt="image of you"
+                            fill
+                          />
+                        </>
+                      )}
+                    </FormLabel>
+                  ) : (
+                    <div className="flex items-s gap-6">
+                      <UploadButton
+                        content={{
+                          button: (
+                            <div className="flexcenter whitespace-nowrap text-foreground gap-6">
+                              {!begain ? (
+                                <>
+                                  {" "}
+                                  <ImagePlusIcon className="" />
+                                  <p>Upload An Image</p>
+                                </>
+                              ) : (
+                                <Loader2 className="relative z-50 animate-spin" />
+                              )}
+                            </div>
+                          ),
+                        }}
+                        endpoint="imageUploader"
+                        className="items-start"
+                        appearance={{
+                          button: `bg-border w-52 p-2  text-primary-foreground `,
+                        }}
+                        onUploadBegin={() => setBegain(true)}
+                        onClientUploadComplete={(e) => {
+                          setBegain(false);
+                          field.onChange(e?.[0].url);
+                        }}
+                      />
+                    </div>
+                  )}
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="billboardId"
@@ -122,7 +191,15 @@ console.log(form.formState.isSubmitting)
                 <FormItem className=" flex flex-col w-fit   ">
                   <FormLabel>choose a billboard</FormLabel>
                   <FormControl>
-                    <Select onValueChange={(e) => field.onChange(e)}>
+                    <Select
+                      defaultValue={category?.billboardId}
+                      onValueChange={(e) => {
+                        field.onChange(e);
+                        toast.loading("setting up billboard Preview", {
+                          duration: 1000,
+                        });
+                      }}
+                    >
                       <SelectTrigger className="w-[180px] ring-0 !shadow-none">
                         <SelectValue placeholder="Select a billboard" />
                       </SelectTrigger>
@@ -130,25 +207,42 @@ console.log(form.formState.isSubmitting)
                         <SelectGroup>
                           <SelectLabel>BillBoards List</SelectLabel>
                           {billBoards.map((e) => (
-                            <SelectItem  key={e.id} value={e.id}> {e.label} </SelectItem>
+                            <SelectItem key={e.id} value={e.id}>
+                              {" "}
+                              {e.label}{" "}
+                            </SelectItem>
                           ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
                   </FormControl>
+
+                  {field.value ? (
+                    <>
+                      {" "}
+                      <FormLabel>Image Preview</FormLabel>
+                      <Image
+                        className="rounded-xl"
+                        alt=""
+                        height={250}
+                        width={250}
+                        src={
+                          billBoards.find((e) => e.id == field.value)?.imageUrl!
+                        }
+                      />
+                    </>
+                  ) : null}
                 </FormItem>
               )}
             />
           </div>
-          {form.watch().name !== category?.name && (
+          {isFormDataChanged && (
             <div className="flex items-center gap-6 justify-start">
               <Button
                 type="submit"
                 disabled={form.formState.isSubmitting}
                 className={`${
-                  form.formState.isSubmitting
-                    ? " bg-foreground"
-                    : ""
+                  form.formState.isSubmitting ? " bg-foreground" : ""
                 } flexcenter w-[100px] gap-6`}
               >
                 {form.formState.isSubmitting ? (
@@ -156,7 +250,6 @@ console.log(form.formState.isSubmitting)
                 ) : (
                   "Submit"
                 )}
-
               </Button>
             </div>
           )}
