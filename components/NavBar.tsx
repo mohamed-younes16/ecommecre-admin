@@ -17,7 +17,7 @@ const NavBar = ({ stores }: { stores: Store[] }) => {
           <StoreSwitcher stores={stores || []} />
           <MainNav />
         </div>{" "}
-        <div className="flexcenter gap-4 min-w-[150px]">
+        <div className="flexcenter gap-4 min-w-[180px]">
           <ModeToggle />
           <UserButton afterSignOutUrl="/" />{" "}
         </div>
