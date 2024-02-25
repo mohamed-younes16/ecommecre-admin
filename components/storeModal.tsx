@@ -97,7 +97,7 @@ const StoreModal = ({ icon, openOptional }) => {
         .then((e) => {
           toast.success(e.data.message, { invert: true });
           setTimeout(() => {
-            window.location.assign(`/dashboard/${e.data.store.id}`);
+            window.location.assign(`/dashboard/${e.data.store.id}/overview`);
           }, 500);
         })
         .catch((e) => {

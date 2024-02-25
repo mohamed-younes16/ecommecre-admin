@@ -55,6 +55,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "uploadthing": "^5.7.2",
+    "usehooks-ts": "^2.15.1",
     "utf-8-validate": "^5.0.10",
     "uuid": "^9.0.1",
     "vaul": "^0.8.0",
