@@ -34,7 +34,7 @@ const page = async ({
 
     return tot;
   };
-  orderPrice(orders[0]);
+
   const formattedorders: orderColumn[] = orders.map((e) => ({
     products: e.items.map((e) => e.product.name).join(" "),
 

@@ -2,7 +2,6 @@ import prismadb from "@/lib/prismabd";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
-import { product } from "@prisma/client";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -20,7 +19,7 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
-  const { productsData }: { productsData: productType[] } = await req.json();
+  const { productsData,ownerId }: { productsData: productType[] ,ownerId:string} = await req.json();
   console.log(productsData)
   const productIds = productsData.map((e) => e.productId);
   const products = await prismadb.product.findMany({
@@ -38,11 +37,10 @@ export async function POST(
       },
     })
   );
-  console.log("________________________________________________________________")
-  console.log(line_items)
-  console.log("________________________________________________________________")
+
   const order = await prismadb.order.create({
     data: {
+      orderOwnerId:ownerId,
       isPaid: false,
       storeId: params.storeId,
       items: {
@@ -57,7 +55,7 @@ export async function POST(
       },
     },
   });
-  console.log(order)
+
   const sesssion = await stripe.checkout.sessions.create({
     line_items,
     mode: "payment",
